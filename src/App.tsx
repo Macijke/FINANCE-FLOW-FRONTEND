@@ -12,6 +12,7 @@ import Analytics from "./pages/Analytics";
 import Goals from "./pages/Goals";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import Auth from "@/pages/Auth.tsx";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,9 @@ const App = () => (
           </MainLayout>
         </BrowserRouter>
       </TooltipProvider>
+        <Routes>
+            <Route path="/auth" element={<Auth />} />
+        </Routes>
     </ThemeProvider>
   </QueryClientProvider>
 );
