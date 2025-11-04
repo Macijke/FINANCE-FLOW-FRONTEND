@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,13 +28,6 @@ export default function Auth() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4">
             <div className="w-full max-w-md animate-fade-in">
-                <Link
-                    to="/"
-                    className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-smooth mb-6"
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                    Back to Dashboard
-                </Link>
 
                 <Card className="p-8 shadow-elevated border-border/50">
                     <div className="text-center mb-8">

@@ -11,36 +11,38 @@ import Budgets from "./pages/Budgets";
 import Analytics from "./pages/Analytics";
 import Goals from "./pages/Goals";
 import Settings from "./pages/Settings";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
-import Auth from "@/pages/Auth.tsx";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="light">
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <MainLayout>
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/transactions" element={<Transactions />} />
-              <Route path="/budgets" element={<Budgets />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/goals" element={<Goals />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </MainLayout>
-        </BrowserRouter>
-      </TooltipProvider>
-        <Routes>
-            <Route path="/auth" element={<Auth />} />
-        </Routes>
-    </ThemeProvider>
-  </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+        <ThemeProvider defaultTheme="light">
+            <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/auth" element={<Auth />} />
+                        <Route path="*" element={
+                            <MainLayout>
+                                <Routes>
+                                    <Route path="/" element={<Dashboard />} />
+                                    <Route path="/transactions" element={<Transactions />} />
+                                    <Route path="/budgets" element={<Budgets />} />
+                                    <Route path="/analytics" element={<Analytics />} />
+                                    <Route path="/goals" element={<Goals />} />
+                                    <Route path="/settings" element={<Settings />} />
+                                    <Route path="*" element={<NotFound />} />
+                                </Routes>
+                            </MainLayout>
+                        } />
+                    </Routes>
+                </BrowserRouter>
+            </TooltipProvider>
+        </ThemeProvider>
+    </QueryClientProvider>
 );
 
 export default App;
