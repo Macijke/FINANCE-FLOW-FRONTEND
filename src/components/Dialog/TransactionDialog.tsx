@@ -91,18 +91,25 @@ export function TransactionDialog({children, onTransactionAdded}: TransactionDia
         }
     }
 
-    const onSubmit = (data: TransactionFormValues) => {
-        console.log("Transaction data:", data);
-        const response = createTransaction(data);
-        console.log("Create transaction response:", response);
-        toast({
-            title: "Transaction added",
-            description: `${data.type === "INCOME" ? "Income" : "Expense"} in ${data.amount} USD was added.`,
-        });
-        setOpen(false);
-        form.reset();
-        if (onTransactionAdded) {
-            onTransactionAdded();
+    const onSubmit = async (data: TransactionFormValues) => {
+        const response = await createTransaction(data);
+
+        if (response && !response.error) {
+            toast({
+                title: "Transaction added",
+                description: `${data.type === "INCOME" ? "Income" : "Expense"} in ${data.amount} USD was added.`,
+            });
+            setOpen(false);
+            form.reset();
+            if (onTransactionAdded) {
+                onTransactionAdded();
+            }
+        } else {
+            toast({
+                title: "Error",
+                description: response?.message || "Transaction failed. Please try again.",
+                variant: "destructive"
+            });
         }
     };
 
