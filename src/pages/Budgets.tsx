@@ -1,11 +1,10 @@
-import {MoreVertical, Pencil, Plus, Trash2} from "lucide-react";
+import {Edit, Plus, Trash2} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import {useEffect, useState} from "react";
 import {useCookies} from "react-cookie";
 import {cn} from "@/lib/utils";
 import {BudgetDialog} from "@/components/Dialog/BudgetDialog.tsx";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 
 export default function Budgets() {
     const [cookies] = useCookies(["user"]);
@@ -180,36 +179,23 @@ export default function Budgets() {
                                                 )}
                                             </div>
 
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="h-8 w-8 p-0"
-                                                    >
-                                                        <MoreVertical className="h-4 w-4"/>
+                                            <div className="flex gap-1 flex-shrink-0">
+                                                <BudgetDialog onBudgetAdded={onBudgetAdded}
+                                                              editBudget={budget}>
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                        <Edit className="h-4 w-4"/>
                                                     </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
-                                                    <BudgetDialog
-                                                        onBudgetAdded={onBudgetAdded}
-                                                        editBudget={budget}
-                                                    >
-                                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                                            <Pencil className="h-4 w-4 mr-2"/>
-                                                            Edit Budget
-                                                        </DropdownMenuItem>
-                                                    </BudgetDialog>
+                                                </BudgetDialog>
 
-                                                    <DropdownMenuItem
-                                                        onClick={() => handleDeleteBudget(budget.id)}
-                                                        className="text-destructive"
-                                                    >
-                                                        <Trash2 className="h-4 w-4 mr-2"/>
-                                                        Delete
-                                                    </DropdownMenuItem>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 text-destructive hover:text-destructive"
+                                                    onClick={() => handleDeleteBudget(budget.id)}
+                                                >
+                                                    <Trash2 className="h-4 w-4"/>
+                                                </Button>
+                                            </div>
                                         </div>
 
                                         <div className="text-base space-y-1">
