@@ -5,7 +5,7 @@ import {Input} from "@/components/ui/input";
 import {Card} from "@/components/ui/card";
 import {useCookies} from "react-cookie";
 import {cn} from "@/lib/utils.ts";
-import {TransactionDialog} from "@/components/Transaction/TransactionDialog.tsx";
+import {TransactionDialog} from "@/components/Dialog/TransactionDialog.tsx";
 
 export default function Transactions() {
     const [cookies] = useCookies(['user']);
@@ -14,7 +14,6 @@ export default function Transactions() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // ============= FILTRY =============
     const [searchQuery, setSearchQuery] = useState("");
     const [filterType, setFilterType] = useState("ALL");
     const [startDate, setStartDate] = useState("");
@@ -47,6 +46,7 @@ export default function Transactions() {
     useEffect(() => {
         handleTransactions();
     }, [cookies.user]);
+
 
     useEffect(() => {
         let filtered = transactions;
@@ -131,7 +131,8 @@ export default function Transactions() {
             <Card className="p-4 space-y-3">
                 <div className="flex gap-4 flex-col sm:flex-row">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
+                        <Search
+                            className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
                         <Input
                             placeholder="Search by name, category, or amount..."
                             className="pl-10 h-9"
@@ -185,9 +186,9 @@ export default function Transactions() {
                         </div>
                     </div>
 
-                    {/* PRAWO - Info */}
                     <div className="text-xs text-muted-foreground">
-                        <span className="font-semibold text-foreground">{filteredTransactions.length}</span>/{transactions.length}
+                        <span
+                            className="font-semibold text-foreground">{filteredTransactions.length}</span>/{transactions.length}
                     </div>
                 </div>
             </Card>
