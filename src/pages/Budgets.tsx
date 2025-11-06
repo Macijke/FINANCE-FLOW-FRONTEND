@@ -1,10 +1,11 @@
-import {Plus} from "lucide-react";
+import {MoreVertical, Pencil, Plus, Trash2} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import {useEffect, useState} from "react";
 import {useCookies} from "react-cookie";
 import {cn} from "@/lib/utils";
 import {BudgetDialog} from "@/components/Dialog/BudgetDialog.tsx";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 
 export default function Budgets() {
     const [cookies] = useCookies(["user"]);
@@ -12,6 +13,7 @@ export default function Budgets() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [editingBudget, setEditingBudget] = useState(null);
 
     const fetchBudgets = async () => {
         try {
@@ -41,6 +43,26 @@ export default function Budgets() {
 
     const onBudgetAdded = () => {
         fetchBudgets();
+        setEditingBudget(null);
+    };
+
+    const handleDeleteBudget = async (budgetId: number) => {
+        if (!confirm("Are you sure you want to delete this budget?")) return;
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/budgets/${budgetId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${cookies.user}`,
+                },
+            });
+
+            if (response.ok) {
+                fetchBudgets();
+            }
+        } catch (err) {
+            console.error('Error deleting budget:', err);
+        }
     };
 
     const goToPreviousMonth = () => {
@@ -86,7 +108,10 @@ export default function Budgets() {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold">Budgets</h1>
-                <BudgetDialog onBudgetAdded={onBudgetAdded}>
+                <BudgetDialog
+                    onBudgetAdded={onBudgetAdded}
+                    editBudget={editingBudget}
+                >
                     <Button className="gap-2">
                         <Plus className="h-4 w-4"/>
                         Add Budget
@@ -121,7 +146,8 @@ export default function Budgets() {
                     {budgets.map((budget) => {
                         const budgetDate = new Date(budget.month);
                         const budgetMonth = budgetDate.getMonth() + 1;
-                        if (budgetMonth == currentMonth.getMonth() + 1 && budgetDate.getFullYear() == currentMonth.getFullYear()) {
+
+                        if (budgetMonth === currentMonth.getMonth() + 1 && budgetDate.getFullYear() === currentMonth.getFullYear()) {
                             const percentage = budget.percentageUsed || 0;
                             const isOverBudget = percentage > 100;
                             const isCloseToBudget = percentage > 80 && percentage <= 100;
@@ -137,11 +163,53 @@ export default function Budgets() {
                                     )}
                                 >
                                     <div className="space-y-3">
-                                        <div className="flex items-center gap-2">
-                                            <div className="p-1 rounded-lg flex-shrink-0 text-3xl" style={{backgroundColor: budget.categoryColor}}>{icon}</div>
-                                            <h3 className="font-semibold text-3xl">{budget.categoryName}</h3>
-                                            {isOverBudget && <span
-                                                className="text-sm bg-red-500/20 text-red-600 px-2 py-1 rounded">Over</span>}
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2 flex-1">
+                                                <div
+                                                    className="p-1 rounded-lg flex-shrink-0 text-3xl"
+                                                    style={{backgroundColor: budget.categoryColor}}
+                                                >
+                                                    {icon}
+                                                </div>
+                                                <h3 className="font-semibold text-3xl truncate">{budget.categoryName}</h3>
+                                                {isOverBudget && (
+                                                    <span
+                                                        className="text-sm bg-red-500/20 text-red-600 px-2 py-1 rounded flex-shrink-0">
+                                                        Over
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-8 w-8 p-0"
+                                                    >
+                                                        <MoreVertical className="h-4 w-4"/>
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <BudgetDialog
+                                                        onBudgetAdded={onBudgetAdded}
+                                                        editBudget={budget}
+                                                    >
+                                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                                            <Pencil className="h-4 w-4 mr-2"/>
+                                                            Edit Budget
+                                                        </DropdownMenuItem>
+                                                    </BudgetDialog>
+
+                                                    <DropdownMenuItem
+                                                        onClick={() => handleDeleteBudget(budget.id)}
+                                                        className="text-destructive"
+                                                    >
+                                                        <Trash2 className="h-4 w-4 mr-2"/>
+                                                        Delete
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </div>
 
                                         <div className="text-base space-y-1">
@@ -161,19 +229,21 @@ export default function Budgets() {
                                                     "font-semibold",
                                                     isOverBudget ? "text-red-600" : "text-green-600"
                                                 )}>
-                                                {isOverBudget ? "-" : "+"}${Math.abs(budget.remainingAmount || 0).toFixed(2)}
-                                            </span>
+                                                    {isOverBudget ? "-" : "+"}${Math.abs(budget.remainingAmount || 0).toFixed(2)}
+                                                </span>
                                             </div>
                                         </div>
 
                                         <div className="space-y-1">
                                             <div className="flex justify-between text-sm">
                                                 <span>{percentage.toFixed(0)}% Used</span>
-                                                {isOverBudget &&
-                                                    <span className="text-red-600 font-semibold">⚠️ Over Budget</span>}
-                                                {isCloseToBudget &&
-                                                    <span className="text-yellow-600 font-semibold">⚠️ Close to Budget</span>
-                                                }
+                                                {isOverBudget && (
+                                                    <span className="text-red-600 font-semibold">⚠️ Over Budget</span>
+                                                )}
+                                                {isCloseToBudget && (
+                                                    <span
+                                                        className="text-yellow-600 font-semibold">⚠️ Close to Budget</span>
+                                                )}
                                             </div>
                                             <div className="w-full bg-muted rounded-full overflow-hidden h-2">
                                                 <div
@@ -186,7 +256,6 @@ export default function Budgets() {
                                 </Card>
                             );
                         }
-
                     })}
                 </div>
             )}

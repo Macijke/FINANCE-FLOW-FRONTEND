@@ -4,14 +4,13 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {format} from "date-fns";
 import {CalendarIcon} from "lucide-react";
-import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,} from "@/components/ui/dialog";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select";
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Input} from "@/components/ui/input";
-import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Calendar} from "@/components/ui/calendar";
-import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {cn} from "@/lib/utils";
 import {toast} from "@/hooks/use-toast";
 import {useCookies} from "react-cookie";
@@ -24,23 +23,34 @@ const budgetSchema = z.object({
     }),
 });
 
-type BudgetFormValues = z.infer<typeof budgetSchema>;
-
-interface BudgetDialog {
-    children: React.ReactNode;
-    onBudgetAdded?: () => void;
+interface EditBudget {
+    id: number;
+    categoryId: number;
+    limitAmount: number;
+    month: string;
 }
 
-export function BudgetDialog({children, onBudgetAdded}: BudgetDialog) {
+type BudgetFormValues = z.infer<typeof budgetSchema>;
+
+interface BudgetDialogProps {
+    children: React.ReactNode;
+    onBudgetAdded?: () => void;
+    editBudget?: EditBudget;
+}
+
+export function BudgetDialog({children, onBudgetAdded, editBudget}: BudgetDialogProps) {
     const [open, setOpen] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [cookies] = useCookies(['user']);
+
+    const isEditMode = !!editBudget;
 
     const form = useForm<BudgetFormValues>({
         resolver: zodResolver(budgetSchema),
         defaultValues: {
             categoryId: "",
-            limitAmount: ""
+            limitAmount: "",
         },
     });
 
@@ -59,7 +69,7 @@ export function BudgetDialog({children, onBudgetAdded}: BudgetDialog) {
         } catch (err) {
             console.error('Error:', err);
         }
-    }
+    };
 
     const createBudget = async (budgetData: BudgetFormValues) => {
         try {
@@ -76,20 +86,50 @@ export function BudgetDialog({children, onBudgetAdded}: BudgetDialog) {
                 }),
             });
 
-            const data = await response.json();
-            return data;
+            return await response.json();
         } catch (err) {
             console.error('Error:', err);
+            return {error: true};
         }
-    }
+    };
+
+    const updateBudget = async (budgetData: BudgetFormValues) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/budgets/${editBudget.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${cookies.user}`,
+                },
+                body: JSON.stringify({
+                    categoryId: parseInt(budgetData.categoryId),
+                    limitAmount: parseFloat(budgetData.limitAmount),
+                    month: format(budgetData.month, 'yyyy-MM-dd'),
+                }),
+            });
+
+            return await response.json();
+        } catch (err) {
+            console.error('Error:', err);
+            return {error: true};
+        }
+    };
 
     const onSubmit = async (data: BudgetFormValues) => {
-        const response = await createBudget(data);
+        setLoading(true);
+
+        const response = isEditMode
+            ? await updateBudget(data)
+            : await createBudget(data);
+
+        setLoading(false);
 
         if (response && !response.error) {
             toast({
-                title: "Budget added successfully",
-                description: `${data.limitAmount} budget for category added.`,
+                title: isEditMode ? "Budget updated" : "Budget added",
+                description: isEditMode
+                    ? `Budget limit updated to $${data.limitAmount}`
+                    : `$${data.limitAmount} budget for category added.`,
             });
             setOpen(false);
             form.reset();
@@ -99,7 +139,7 @@ export function BudgetDialog({children, onBudgetAdded}: BudgetDialog) {
         } else {
             toast({
                 title: "Error",
-                description: response?.message || "Budget add failed. Please try again.",
+                description: response?.message || "Operation failed. Please try again.",
                 variant: "destructive"
             });
         }
@@ -108,15 +148,32 @@ export function BudgetDialog({children, onBudgetAdded}: BudgetDialog) {
     useEffect(() => {
         if (open) {
             fetchCategories();
+
+            if (editBudget) {
+                console.log(editBudget);
+                form.reset({
+                    categoryId: String(editBudget.categoryId || ""),
+                    limitAmount: String(editBudget.limitAmount || ""),
+                    month: editBudget.month ? new Date(editBudget.month) : new Date(),
+                });
+            } else {
+                form.reset({
+                    categoryId: "",
+                    limitAmount: "",
+                    month: new Date(),
+                });
+            }
         }
-    }, [open]);
+    }, [open, editBudget]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogTitle>Add new transaction</DialogTitle>
+                    <DialogTitle>
+                        {isEditMode ? "Edit Budget" : "Add New Budget"}
+                    </DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -146,7 +203,11 @@ export function BudgetDialog({children, onBudgetAdded}: BudgetDialog) {
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Category</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                        disabled={isEditMode}
+                                    >
                                         <FormControl>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Select a category"/>
@@ -179,7 +240,7 @@ export function BudgetDialog({children, onBudgetAdded}: BudgetDialog) {
                             name="month"
                             render={({field}) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Transaction date</FormLabel>
+                                    <FormLabel>Budget Month</FormLabel>
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <FormControl>
@@ -191,9 +252,9 @@ export function BudgetDialog({children, onBudgetAdded}: BudgetDialog) {
                                                     )}
                                                 >
                                                     {field.value ? (
-                                                        format(field.value, "PPP")
+                                                        format(field.value, "MMMM yyyy")
                                                     ) : (
-                                                        <span>Select Date</span>
+                                                        <span>Select Month</span>
                                                     )}
                                                     <CalendarIcon className="ml-auto h-4 w-4 opacity-50"/>
                                                 </Button>
@@ -205,7 +266,6 @@ export function BudgetDialog({children, onBudgetAdded}: BudgetDialog) {
                                                 selected={field.value}
                                                 onSelect={field.onChange}
                                                 initialFocus
-                                                className={cn("p-3 pointer-events-auto")}
                                             />
                                         </PopoverContent>
                                     </Popover>
@@ -223,8 +283,12 @@ export function BudgetDialog({children, onBudgetAdded}: BudgetDialog) {
                             >
                                 Cancel
                             </Button>
-                            <Button type="submit" className="flex-1">
-                                Add budget
+                            <Button
+                                type="submit"
+                                className="flex-1"
+                                disabled={loading}
+                            >
+                                {loading ? "Saving..." : isEditMode ? "Update Budget" : "Add Budget"}
                             </Button>
                         </div>
                     </form>
