@@ -7,6 +7,7 @@ import {Card} from "@/components/ui/card";
 import {Separator} from "@/components/ui/separator";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router-dom";
+import {getApiUrl} from "@/config/api.ts";
 
 export default function Auth() {
     const navigate = useNavigate();
@@ -43,7 +44,7 @@ export default function Auth() {
         }
 
         try {
-            const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+            const response = await fetch(getApiUrl(`/auth/login`), {
                 method: "POST", headers: {
                     "Content-Type": "application/json",
                 }, body: JSON.stringify(loginData)
@@ -76,7 +77,7 @@ export default function Auth() {
         }
 
         try {
-            const response = await fetch("http://localhost:8080/api/v1/auth/register", {
+            const response = await fetch(getApiUrl(`/auth/register`), {
                 method: "POST", headers: {
                     "Content-Type": "application/json",
                 }, body: JSON.stringify(registerData)

@@ -15,6 +15,7 @@ import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
 import {cn} from "@/lib/utils";
 import {toast} from "@/hooks/use-toast";
 import {useCookies} from "react-cookie";
+import {getApiUrl} from "@/config/api.ts";
 
 const transactionSchema = z.object({
     categoryId: z.string().min(1, "Category is required"),
@@ -52,7 +53,7 @@ export function TransactionDialog({children, onTransactionAdded}: TransactionDia
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/v1/categories', {
+            const response = await fetch(getApiUrl(`/categories`), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${cookies.user}`,
@@ -69,7 +70,7 @@ export function TransactionDialog({children, onTransactionAdded}: TransactionDia
 
     const createTransaction = async (transactionData: TransactionFormValues) => {
         try {
-            const response = await fetch('http://localhost:8080/api/v1/transactions', {
+            const response = await fetch(getApiUrl(`/transactions`), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

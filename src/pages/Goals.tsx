@@ -6,6 +6,7 @@ import {useCookies} from "react-cookie";
 import {cn} from "@/lib/utils.ts";
 import {GoalDialog} from "@/components/Dialog/GoalDialog.tsx";
 import {ContributeDialog} from "@/components/Dialog/ContributeDialog.tsx";
+import {getApiUrl} from "@/config/api.ts";
 
 export default function Goals() {
     const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ export default function Goals() {
     const fetchSavingsGoals = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:8080/api/v1/savings-goals', {
+            const response = await fetch(getApiUrl(`/savings-goals`), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${cookies.user}`,
@@ -49,7 +50,7 @@ export default function Goals() {
         if (!confirm("Are you sure you want to delete this goal?")) return;
 
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/savings-goals/${goalId}`, {
+            const response = await fetch(getApiUrl(`/savings-goals/${goalId}`), {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${cookies.user}`,

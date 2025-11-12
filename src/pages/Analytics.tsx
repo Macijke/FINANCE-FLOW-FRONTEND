@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import {useCookies} from "react-cookie";
 import {useEffect, useState} from "react";
+import {getApiUrl} from "@/config/api.ts";
 
 export default function Analytics() {
     const [cookies] = useCookies(["user"]);
@@ -25,7 +26,7 @@ export default function Analytics() {
     const fetchAnalytics = async () => {
         try {
             setLoading(true);
-            const response = await fetch("http://localhost:8080/api/v1/analytics", {
+            const response = await fetch(getApiUrl(`/analytics`), {
                 headers: {
                     "Authorization": `Bearer ${cookies.user}`,
                 },
@@ -41,7 +42,7 @@ export default function Analytics() {
 
     const fetchMonthlyTrends = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/v1/analytics/monthly-trends", {
+            const response = await fetch(getApiUrl(`/analytics/monthly-trends`), {
                 headers: {
                     "Authorization": `Bearer ${cookies.user}`,
                 },

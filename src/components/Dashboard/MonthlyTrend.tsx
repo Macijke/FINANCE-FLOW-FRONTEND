@@ -2,13 +2,14 @@ import {Card} from "@/components/ui/card";
 import {CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import {useCookies} from "react-cookie";
 import {useEffect, useState} from "react";
+import {getApiUrl} from "@/config/api.ts";
 
 export function MonthlyTrend() {
     const [cookies] = useCookies(["user"]);
     const [monthlyTrends, setmonthlyTrends] = useState([]);
 
     const getMonthlyTrends = async () => {
-        const response = await fetch(`http://localhost:8080/api/v1/analytics/monthly-trends`, {
+        const response = await fetch(getApiUrl(`/analytics/monthly-trends`), {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

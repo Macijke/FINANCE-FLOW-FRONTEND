@@ -2,6 +2,7 @@ import {Card} from "@/components/ui/card";
 import {Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip} from "recharts";
 import {useCookies} from "react-cookie";
 import {useEffect, useState} from "react";
+import {getApiUrl} from "@/config/api.ts";
 
 export function SpendingChart() {
 
@@ -9,7 +10,7 @@ export function SpendingChart() {
     const [categoryBreakdown, setCategoryBreakdown] = useState([]);
 
     const getCategoryBreakdown = async () => {
-        const response = await fetch(`http://localhost:8080/api/v1/analytics/category-breakdown`, {
+        const response = await fetch(getApiUrl(`/analytics/category-breakdown`), {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

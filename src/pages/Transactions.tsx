@@ -6,6 +6,7 @@ import {Card} from "@/components/ui/card";
 import {useCookies} from "react-cookie";
 import {cn} from "@/lib/utils.ts";
 import {TransactionDialog} from "@/components/Dialog/TransactionDialog.tsx";
+import {getApiUrl} from "@/config/api.ts";
 
 export default function Transactions() {
     const [cookies] = useCookies(['user']);
@@ -22,7 +23,7 @@ export default function Transactions() {
     const handleTransactions = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:8080/api/v1/transactions', {
+            const response = await fetch(getApiUrl(`/transactions`), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${cookies.user}`,

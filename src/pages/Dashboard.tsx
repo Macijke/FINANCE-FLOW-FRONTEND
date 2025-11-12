@@ -5,6 +5,7 @@ import {SpendingChart} from "@/components/Dashboard/SpendingChart";
 import {MonthlyTrend} from "@/components/Dashboard/MonthlyTrend";
 import {useCookies} from "react-cookie";
 import {useEffect, useState} from "react";
+import {getApiUrl} from "@/config/api.ts";
 
 export default function Dashboard() {
     const currentDate = new Date().toLocaleDateString("en-US", {
@@ -18,7 +19,7 @@ export default function Dashboard() {
     const [summary, setSummary] = useState([]);
 
     const getDashboardSummary = async () => {
-        const response = await fetch("http://localhost:8080/api/v1/analytics/summary", {
+        const response = await fetch(getApiUrl(`/analytics/summary`), {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

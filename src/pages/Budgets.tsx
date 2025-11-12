@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {useCookies} from "react-cookie";
 import {cn} from "@/lib/utils";
 import {BudgetDialog} from "@/components/Dialog/BudgetDialog.tsx";
+import {getApiUrl} from "@/config/api.ts";
 
 export default function Budgets() {
     const [cookies] = useCookies(["user"]);
@@ -17,7 +18,7 @@ export default function Budgets() {
     const fetchBudgets = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:8080/api/v1/budgets', {
+            const response = await fetch(getApiUrl(`/budgets`), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${cookies.user}`,
@@ -49,7 +50,7 @@ export default function Budgets() {
         if (!confirm("Are you sure you want to delete this budget?")) return;
 
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/budgets/${budgetId}`, {
+            const response = await fetch(getApiUrl(`/budgets/${budgetId}`), {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${cookies.user}`,

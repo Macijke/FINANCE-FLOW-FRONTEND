@@ -3,6 +3,7 @@ import {ArrowDownRight, ArrowUpRight} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {useEffect, useState} from "react";
 import {useCookies} from "react-cookie";
+import {getApiUrl} from "@/config/api.ts";
 
 export function RecentTransactions() {
 
@@ -10,7 +11,7 @@ export function RecentTransactions() {
     const [recentTransactions, setRecentTransactions] = useState([]);
 
     const getRecentTransactions = async (maxLimit: number) => {
-        const response = await fetch(`http://localhost:8080/api/v1/transactions/recent?limit=${maxLimit}`, {
+        const response = await fetch(getApiUrl(`/transactions/recent?limit=${maxLimit}`), {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

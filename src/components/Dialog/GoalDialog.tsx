@@ -14,6 +14,7 @@ import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
 import {cn} from "@/lib/utils";
 import {toast} from "@/hooks/use-toast";
 import {useCookies} from "react-cookie";
+import {getApiUrl} from "@/config/api.ts";
 
 const goalSchema = z.object({
     name: z.string().min(1, "Name is required"),
@@ -85,7 +86,7 @@ export function GoalDialog({children, onGoalAdded, editGoal}: GoalDialog) {
 
     const createGoal = async (goalData: GoalFormValues) => {
         try {
-            const response = await fetch('http://localhost:8080/api/v1/savings-goals', {
+            const response = await fetch(getApiUrl(`/savings-goals`), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,7 +106,7 @@ export function GoalDialog({children, onGoalAdded, editGoal}: GoalDialog) {
 
     const updateGoal = async (goalData: GoalFormValues) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/savings-goals/${editGoal.id}`, {
+            const response = await fetch(getApiUrl(`/savings-goals/${editGoal.id}`), {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

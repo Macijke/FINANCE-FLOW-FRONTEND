@@ -8,6 +8,7 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {useCookies} from "react-cookie";
 import {toast} from "@/hooks/use-toast";
+import {getApiUrl} from "@/config/api.ts";
 
 const contributeSchema = z.object({
     amount: z
@@ -44,7 +45,7 @@ export function ContributeDialog({children, goal, onContributed}: ContributeDial
     const onSubmit = async (data: ContributeFormValues) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/savings-goals/${goal.id}/contribute`, {
+            const response = await fetch(getApiUrl(`/savings-goals/${goal.id}/contribute`), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
