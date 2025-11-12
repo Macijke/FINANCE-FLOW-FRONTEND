@@ -5,6 +5,7 @@ import {Label} from "@/components/ui/label";
 import {Camera, Info, Lock} from "lucide-react";
 import {useState, useEffect} from "react";
 import {useCookies} from "react-cookie";
+import {getApiUrl} from "@/config/api.ts";
 
 export default function Settings() {
     const [cookies] = useCookies(['user']);
@@ -28,7 +29,7 @@ export default function Settings() {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/users/profile', {
+                const response = await fetch(getApiUrl(`/users/profile`), {
                     headers: {
                         'Authorization': `Bearer ${cookies.user}`,
                     },
@@ -62,7 +63,7 @@ export default function Settings() {
         try {
             setLoading(prev => ({ ...prev, profile: true }));
 
-            const response = await fetch('http://localhost:8080/api/v1/users/profile-picture', {
+            const response = await fetch(getApiUrl(`/users/profile-picture`), {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -129,7 +130,7 @@ export default function Settings() {
         try {
             setLoading(prev => ({ ...prev, password: true }));
 
-            const response = await fetch('http://localhost:8080/api/v1/auth/change-password', {
+            const response = await fetch(getApiUrl(`/auth/change-password`), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

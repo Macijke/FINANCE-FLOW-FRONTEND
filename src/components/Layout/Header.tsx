@@ -13,6 +13,7 @@ import {
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import {getApiUrl} from "@/config/api.ts";
 
 interface HeaderProps {
     onMenuClick?: () => void;
@@ -27,7 +28,7 @@ export function Header({onMenuClick}: HeaderProps) {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/users/profile', {
+                const response = await fetch(getApiUrl(`/users/profile`), {
                     headers: {
                         'Authorization': `Bearer ${cookies.user}`,
                     },
