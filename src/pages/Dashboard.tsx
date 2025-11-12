@@ -1,9 +1,10 @@
-import {Target, TrendingDown, Wallet} from "lucide-react";
+import {Target, TrendingDown, TrendingUp, Wallet} from "lucide-react";
 import {StatCard} from "@/components/Dashboard/StatCard";
 import {RecentTransactions} from "@/components/Dashboard/RecentTransactions";
 import {SpendingChart} from "@/components/Dashboard/SpendingChart";
 import {MonthlyTrend} from "@/components/Dashboard/MonthlyTrend";
 import {useCookies} from "react-cookie";
+import {useEffect, useState} from "react";
 
 export default function Dashboard() {
     const currentDate = new Date().toLocaleDateString("en-US", {
@@ -14,8 +15,9 @@ export default function Dashboard() {
     });
 
     const [cookies] = useCookies(["user"]);
+    const [summary, setSummary] = useState([]);
 
-    const getFullName = async () => {
+/*    const getFullName = async () => {
         const response = await fetch("http://localhost:8080/api/v1/users/me", {
             method: "GET",
             headers: {
@@ -25,7 +27,23 @@ export default function Dashboard() {
         });
         const data = await response.json();
         return data.fullName;
+    }*/
+
+    const getDashboardSummary = async () => {
+        const response = await fetch("http://localhost:8080/api/v1/analytics/summary", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${cookies.user}`,
+            },
+        });
+        const data = await response.json();
+        setSummary(data.data);
     }
+
+    useEffect(() => {
+        getDashboardSummary();
+    }, [cookies.user]);
 
     return (
         <div className="space-y-6 animate-fade-in">
@@ -37,22 +55,22 @@ export default function Dashboard() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <StatCard
                     title="Total Balance"
-                    value="$12,450"
+                    value={"$ " + summary.totalBalance}
                     icon={<Wallet className="h-5 w-5"/>}
-                    trend={{value: "+12.5% from last month", isPositive: true}}
                     variant="gradient"
                 />
                 <StatCard
                     title="This Month Spent"
-                    value="$1,240"
+                    value={"$ " + summary.totalExpenses}
                     icon={<TrendingDown className="h-5 w-5"/>}
-                    trend={{value: "-5.2% from last month", isPositive: true}}
+                    variant="red"
+
                 />
                 <StatCard
-                    title="Savings Goal"
-                    value="45%"
-                    icon={<Target className="h-5 w-5"/>}
-                    trend={{value: "On track", isPositive: true}}
+                    title="This Month Income"
+                    value={"$ " + summary.totalIncome}
+                    icon={<TrendingUp className="h-5 w-5"/>}
+                    variant="green"
                 />
             </div>
 
