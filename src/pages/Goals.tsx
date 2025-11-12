@@ -66,8 +66,8 @@ export default function Goals() {
 
     if (loading) {
         return (
-            <div className="space-y-6 animate-fade-in">
-                <h1 className="text-3xl font-bold">Savings Goals</h1>
+            <div className="space-y-6 animate-fade-in px-4 sm:px-0">
+                <h1 className="text-2xl sm:text-3xl font-bold">Savings Goals</h1>
                 <Card className="p-6 text-center">
                     <p>Loading goals...</p>
                 </Card>
@@ -77,8 +77,8 @@ export default function Goals() {
 
     if (error) {
         return (
-            <div className="space-y-6 animate-fade-in">
-                <h1 className="text-3xl font-bold">Savings Goals</h1>
+            <div className="space-y-6 animate-fade-in px-4 sm:px-0">
+                <h1 className="text-2xl sm:text-3xl font-bold">Savings Goals</h1>
                 <Card className="p-6 text-center text-destructive">
                     <p>Error: {error}</p>
                 </Card>
@@ -87,11 +87,11 @@ export default function Goals() {
     }
 
     return (
-        <div className="space-y-6 animate-fade-in">
-            <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold">Savings Goals</h1>
+        <div className="space-y-6 animate-fade-in px-4 sm:px-0">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <h1 className="text-2xl sm:text-3xl font-bold">Savings Goals</h1>
                 <GoalDialog onGoalAdded={onGoalAdded}>
-                    <Button className="gap-2">
+                    <Button className="gap-2 w-full sm:w-auto">
                         <Plus className="h-4 w-4"/>
                         Add Goal
                     </Button>
@@ -99,11 +99,13 @@ export default function Goals() {
             </div>
 
             {goals.length === 0 ? (
-                <Card className="p-8 text-center">
-                    <p className="text-muted-foreground">No savings goals yet. Create one to get started!</p>
+                <Card className="p-6 sm:p-8 text-center">
+                    <p className="text-sm sm:text-base text-muted-foreground">
+                        No savings goals yet. Create one to get started!
+                    </p>
                 </Card>
             ) : (
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
                     {goals.map((goal) => {
                         const percentage = goal.percentageCompleted || 0;
                         const todayDate = new Date();
@@ -119,33 +121,38 @@ export default function Goals() {
                             <Card
                                 key={goal.id}
                                 className={cn(
-                                    "p-6 transition-all hover:shadow-lg",
+                                    "p-4 sm:p-6 transition-all hover:shadow-lg",
                                     isCompleted && "border-green-500/30 bg-green-500/5"
                                 )}
                             >
                                 <div className="space-y-4">
-                                    <div className="flex items-start justify-between gap-3">
-                                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                                    {/* Header */}
+                                    <div className="flex items-start justify-between gap-2">
+                                        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                                             <div
-                                                className="p-2 rounded-lg text-2xl flex-shrink-0"
+                                                className="p-1.5 sm:p-2 rounded-lg text-xl sm:text-2xl flex-shrink-0"
                                                 style={{backgroundColor: goal.color}}
                                             >
                                                 {goal.icon}
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <h3 className="font-extrabold text-3xl truncate">{goal.name}</h3>
-                                                {isCompleted && (
-                                                    <span
-                                                        className="text-xs bg-green-500/20 text-green-600 px-2 py-1 rounded">
-                                                        ✓ Completed
-                                                    </span>
-                                                )}
-                                                {isUrgent && (
-                                                    <span
-                                                        className="text-xs bg-yellow-500/20 text-yellow-600 px-2 py-1 rounded">
-                                                        ⚠️ Urgent
-                                                    </span>
-                                                )}
+                                                <h3 className="font-bold text-xl sm:text-2xl truncate">
+                                                    {goal.name}
+                                                </h3>
+                                                <div className="flex flex-wrap gap-1 mt-1">
+                                                    {isCompleted && (
+                                                        <span
+                                                            className="text-xs bg-green-500/20 text-green-600 px-2 py-0.5 rounded">
+                                                            ✓ Completed
+                                                        </span>
+                                                    )}
+                                                    {isUrgent && (
+                                                        <span
+                                                            className="text-xs bg-yellow-500/20 text-yellow-600 px-2 py-0.5 rounded">
+                                                            ⚠️ Urgent
+                                                        </span>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
 
@@ -154,7 +161,7 @@ export default function Goals() {
                                                 onGoalAdded={onGoalAdded}
                                                 editGoal={goal}>
                                                 <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                    <Edit className="h-4 w-4"/>
+                                                    <Edit className="h-3.5 w-3.5 sm:h-4 sm:w-4"/>
                                                 </Button>
                                             </GoalDialog>
                                             <Button
@@ -163,29 +170,33 @@ export default function Goals() {
                                                 className="h-8 w-8 text-destructive hover:text-destructive"
                                                 onClick={() => handleDeleteGoal(goal.id)}
                                             >
-                                                <Trash2 className="h-4 w-4"/>
+                                                <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4"/>
                                             </Button>
                                         </div>
                                     </div>
 
                                     {goal.description && (
-                                        <p className="text-sm text-muted-foreground">
+                                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
                                             {goal.description}
                                         </p>
                                     )}
 
-                                    <div className="grid grid-cols-2 gap-3 text-sm">
-                                        <div className="bg-muted/40 rounded-lg p-2">
-                                            <p className="text-xs text-muted-foreground mb-1">Target</p>
-                                            <p className="font-semibold text-base">${goal.targetAmount?.toLocaleString() || 0}</p>
+                                    <div className="grid grid-cols-2 gap-2 sm:gap-3 text-sm">
+                                        <div className="bg-muted/40 rounded-lg p-2 sm:p-3">
+                                            <p className="text-xs text-muted-foreground mb-0.5 sm:mb-1">Target</p>
+                                            <p className="font-semibold text-sm sm:text-base truncate">
+                                                ${goal.targetAmount?.toLocaleString() || 0}
+                                            </p>
                                         </div>
-                                        <div className="bg-muted/40 rounded-lg p-2">
-                                            <p className="text-xs text-muted-foreground mb-1">Current</p>
-                                            <p className="font-semibold text-base text-green-600">${goal.currentAmount?.toLocaleString() || 0}</p>
+                                        <div className="bg-muted/40 rounded-lg p-2 sm:p-3">
+                                            <p className="text-xs text-muted-foreground mb-0.5 sm:mb-1">Current</p>
+                                            <p className="font-semibold text-sm sm:text-base text-green-600 truncate">
+                                                ${goal.currentAmount?.toLocaleString() || 0}
+                                            </p>
                                         </div>
-                                        <div className="bg-muted/40 rounded-lg p-2">
-                                            <p className="text-xs text-muted-foreground mb-1">Deadline</p>
-                                            <p className="font-semibold text-sm">
+                                        <div className="bg-muted/40 rounded-lg p-2 sm:p-3">
+                                            <p className="text-xs text-muted-foreground mb-0.5 sm:mb-1">Deadline</p>
+                                            <p className="font-semibold text-xs sm:text-sm">
                                                 {goal.targetDate ? new Date(goal.targetDate).toLocaleDateString('en-US', {
                                                     month: 'short',
                                                     day: 'numeric',
@@ -193,19 +204,19 @@ export default function Goals() {
                                                 }) : 'N/A'}
                                             </p>
                                         </div>
-                                        <div className="bg-muted/40 rounded-lg p-2">
-                                            <p className="text-xs text-muted-foreground mb-1">Days Left</p>
+                                        <div className="bg-muted/40 rounded-lg p-2 sm:p-3">
+                                            <p className="text-xs text-muted-foreground mb-0.5 sm:mb-1">Days Left</p>
                                             <p className={cn(
-                                                "font-semibold text-sm",
+                                                "font-semibold text-xs sm:text-sm",
                                                 isUrgent && "text-yellow-600"
                                             )}>
-                                                {daysLeft} days
+                                                {daysLeft === Infinity ? 'N/A' : `${daysLeft} days`}
                                             </p>
                                         </div>
                                     </div>
 
                                     <div className="space-y-2">
-                                        <div className="w-full bg-muted rounded-full overflow-hidden h-3">
+                                        <div className="w-full bg-muted rounded-full overflow-hidden h-2.5 sm:h-3">
                                             <div
                                                 className={cn(
                                                     "h-full transition-all",
@@ -219,20 +230,20 @@ export default function Goals() {
                                                 {percentage.toFixed(0)}% complete
                                             </span>
                                             <span className="text-muted-foreground">
-                                                ${goal.remainingAmount?.toLocaleString() || 0} remaining
+                                                ${goal.remainingAmount?.toLocaleString() || 0} left
                                             </span>
                                         </div>
                                     </div>
 
-                                    {!isCompleted && (
+                                    {!isCompleted && monthsLeft > 0 && (
                                         <div className="pt-3 border-t border-border">
-                                            <div className="flex items-center justify-between text-sm">
+                                            <div className="flex items-center justify-between text-xs sm:text-sm">
                                                 <span className="text-muted-foreground">Monthly needed:</span>
                                                 <span className="font-semibold text-foreground">
                                                     ${monthlyNeeded > 0 ? monthlyNeeded.toFixed(2) : '0.00'}
                                                 </span>
                                             </div>
-                                            <p className="text-xs text-muted-foreground mt-1">
+                                            <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
                                                 to reach your deadline
                                             </p>
                                         </div>
@@ -240,7 +251,7 @@ export default function Goals() {
 
                                     {!isCompleted && (
                                         <ContributeDialog goal={goal} onContributed={fetchSavingsGoals}>
-                                            <Button variant="outline" className="w-full">
+                                            <Button variant="outline" className="w-full text-sm sm:text-base">
                                                 Add Contribution
                                             </Button>
                                         </ContributeDialog>

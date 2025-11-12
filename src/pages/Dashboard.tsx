@@ -17,18 +17,6 @@ export default function Dashboard() {
     const [cookies] = useCookies(["user"]);
     const [summary, setSummary] = useState([]);
 
-/*    const getFullName = async () => {
-        const response = await fetch("http://localhost:8080/api/v1/users/me", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${cookies.user}`,
-            },
-        });
-        const data = await response.json();
-        return data.fullName;
-    }*/
-
     const getDashboardSummary = async () => {
         const response = await fetch("http://localhost:8080/api/v1/analytics/summary", {
             method: "GET",
@@ -60,17 +48,17 @@ export default function Dashboard() {
                     variant="gradient"
                 />
                 <StatCard
+                    title="This Month Income"
+                    value={"$ " + summary.totalIncome}
+                    icon={<TrendingUp className="h-5 w-5"/>}
+                    variant="green"
+                />
+                <StatCard
                     title="This Month Spent"
                     value={"$ " + summary.totalExpenses}
                     icon={<TrendingDown className="h-5 w-5"/>}
                     variant="red"
 
-                />
-                <StatCard
-                    title="This Month Income"
-                    value={"$ " + summary.totalIncome}
-                    icon={<TrendingUp className="h-5 w-5"/>}
-                    variant="green"
                 />
             </div>
 
