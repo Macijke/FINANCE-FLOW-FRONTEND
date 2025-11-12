@@ -82,7 +82,6 @@ export default function Analytics() {
                 </div>
             </div>
 
-            {/* Stats Cards */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
                     <div className="flex items-center justify-between mb-4">
@@ -131,7 +130,6 @@ export default function Analytics() {
                 </Card>
             </div>
 
-            {/* Insights - PRZEPROJEKTOWANE */}
             {insights && insights.length > 0 && (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {insights.map((insight, index) => {
@@ -210,9 +208,7 @@ export default function Analytics() {
                 </div>
             )}
 
-            {/* Charts Grid */}
             <div className="grid gap-6 md:grid-cols-2">
-                {/* Pie Chart */}
                 <Card className="p-6">
                     <h2 className="text-xl font-semibold mb-6">Spending by Category</h2>
                     {categoryBreakdowns && categoryBreakdowns.length > 0 ? (
@@ -248,12 +244,10 @@ export default function Analytics() {
                     )}
                 </Card>
 
-                {/* Budget Overview */}
                 <Card className="p-6">
                     <h2 className="text-xl font-semibold mb-6">Budget Overview</h2>
                     {budgetOverview && budgetOverview.budgetStatuses?.length > 0 ? (
                         <div className="space-y-5">
-                            {/* Total Budget Progress */}
                             <div className="space-y-2 pb-4 border-b">
                                 <div className="flex justify-between text-sm">
                                     <span className="font-semibold">Total Budget</span>
@@ -289,7 +283,6 @@ export default function Analytics() {
                                 </div>
                             </div>
 
-                            {/* Individual Budgets */}
                             <div className="space-y-4">
                                 {budgetOverview.budgetStatuses.map((budget) => (
                                     <div key={budget.budgetId} className="space-y-2">
@@ -350,7 +343,6 @@ export default function Analytics() {
                 </Card>
             </div>
 
-            {/* Monthly Trends - UŻYWAM monthlyTrends Z ENDPOINTA */}
             {monthlyTrends && monthlyTrends.length > 0 && (
                 <Card className="p-6">
                     <div className="flex justify-between items-center mb-6">
@@ -422,7 +414,6 @@ export default function Analytics() {
                 </Card>
             )}
 
-            {/* Category Details Table */}
             <Card className="p-6">
                 <h2 className="text-xl font-semibold mb-6">Category Details</h2>
                 {categoryBreakdowns && categoryBreakdowns.length > 0 ? (

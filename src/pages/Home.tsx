@@ -10,7 +10,7 @@ export default function Home() {
                 <div className="container mx-auto px-4 py-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <PiggyBank className="h-8 w-8 text-primary"/>
-                        <span className="text-xl font-bold text-foreground">FinanceTracker</span>
+                        <span className="text-xl font-bold text-foreground">Finance Flow</span>
                     </div>
                     <div className="flex items-center gap-3">
                         <Link to="/auth">
@@ -138,7 +138,7 @@ export default function Home() {
 
             <footer className="border-t border-border py-8">
                 <div className="container mx-auto px-4 text-center text-muted-foreground">
-                    <p>&copy; 2024 FinanceTracker. Wszystkie prawa zastrzeżone.</p>
+                    <p>&copy; 2024 Finance Flow. Wszystkie prawa zastrzeżone.</p>
                 </div>
             </footer>
         </div>

@@ -17,6 +17,19 @@ export default function Dashboard() {
 
     const [cookies] = useCookies(["user"]);
     const [summary, setSummary] = useState([]);
+    const [userProfile, setUserProfile] = useState([]);
+
+    const getUserProfile = async () => {
+        const response = await fetch(getApiUrl(`/users/profile`), {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${cookies.user}`,
+            },
+        });
+        const data = await response.json();
+        setUserProfile(data.data);
+    }
 
     const getDashboardSummary = async () => {
         const response = await fetch(getApiUrl(`/analytics/summary`), {
@@ -32,12 +45,14 @@ export default function Dashboard() {
 
     useEffect(() => {
         getDashboardSummary();
+        getUserProfile();
     }, [cookies.user]);
+    
 
     return (
         <div className="space-y-6 animate-fade-in">
             <div>
-                <h1 className="text-3xl font-bold mb-2">Welcome Back, John!</h1>
+                <h1 className="text-3xl font-bold mb-2">Welcome Back, {userProfile.firstName}!</h1>
                 <p className="text-muted-foreground">Today is {currentDate}</p>
             </div>
 
