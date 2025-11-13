@@ -2,6 +2,9 @@
 
 A modern user interface for Personal Finance Tracker application. Built with **React.js** using **Tailwind CSS** and **Recharts** for financial data visualization.
 
+# **🖥️ Dashboard Preview**
+<img width="1895" height="898" alt="image" src="https://github.com/user-attachments/assets/3267fa8a-d292-4ea1-8932-ea3e50b5facb" />
+
 ## 📋 Table of Contents
 
 - [About The Project](#about-the-project)
