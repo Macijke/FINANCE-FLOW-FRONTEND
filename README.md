@@ -1,8 +1,11 @@
-# Personal Finance Tracker - Frontend
+# Finance Flow - Frontend
 
 Nowoczesny interfejs użytkownika dla aplikacji Personal Finance Tracker. Zbudowany w **React.js** z wykorzystaniem **Tailwind CSS** i **Recharts** do wizualizacji danych finansowych.
 
-![Dashboard Preview](link)
+
+## **Dashboard Preview**
+
+<img width="1895" height="898" alt="image" src="https://github.com/user-attachments/assets/3267fa8a-d292-4ea1-8932-ea3e50b5facb" />
 
 ## 📋 Spis Treści
 
