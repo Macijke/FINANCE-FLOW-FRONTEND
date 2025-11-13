@@ -1,241 +1,221 @@
 # Finance Flow - Frontend
 
-Nowoczesny interfejs użytkownika dla aplikacji Personal Finance Tracker. Zbudowany w **React.js** z wykorzystaniem **Tailwind CSS** i **Recharts** do wizualizacji danych finansowych.
+A modern user interface for Personal Finance Tracker application. Built with **React.js** using **Tailwind CSS** and **Recharts** for financial data visualization.
 
+## 📋 Table of Contents
 
-## **Dashboard Preview**
+- [About The Project](#about-the-project)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running The Application](#running-the-application)
+- [Project Structure](#project-structure)
+- [Available Scripts](#available-scripts)
+- [Backend API](#backend-api)
+- [Code Conventions](#code-conventions)
+- [License](#license)
+- [Author](#author)
 
-<img width="1895" height="898" alt="image" src="https://github.com/user-attachments/assets/3267fa8a-d292-4ea1-8932-ea3e50b5facb" />
+## 🎯 About The Project
 
-## 📋 Spis Treści
+The Finance Flow frontend is a responsive web application that enables users to manage their personal finances. The application offers an intuitive interface for tracking expenses and income, creating budgets, and visualizing financial data.
 
-- [O Projekcie](#o-projekcie)
-- [Funkcjonalności](#funkcjonalności)
-- [Technologie](#technologie)
-- [Wymagania](#wymagania)
-- [Instalacja](#instalacja)
-- [Konfiguracja](#konfiguracja)
-- [Uruchomienie](#uruchomienie)
-- [Struktura Projektu](#struktura-projektu)
-- [Dostępne Skrypty](#dostępne-skrypty)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [Licencja](#licencja)
+**Project Status:** 🚧 In Development
 
-***
+**Live Demo:** [financeflowm.vercel.app](https://financeflowm.vercel.app)
 
-## 🎯 O Projekcie
+## ✨ Features
 
-Frontend aplikacji Personal Finance Tracker to responsywna aplikacja webowa umożliwiająca użytkownikom zarządzanie finansami osobistymi. Aplikacja oferuje intuicyjny interfejs do śledzenia wydatków i przychodów, tworzenia budżetów oraz wizualizacji danych finansowych.
+- 🔐 **User Authentication** - Registration, login, session management (JWT)
+- 💰 **Transaction Management** - Add, edit, delete income and expenses
+- 📊 **Dashboard with Charts** - Data visualization using Recharts (pie charts, line charts, bar charts)
+- 💳 **Monthly Budgets** - Create and monitor budgets with alerts
+- 🎯 **Savings Goals** - Track progress toward financial goals
+- 📱 **Responsive Design** - Full support for mobile and tablet devices
+- 🌓 **Dark Mode** - Toggle between light and dark themes
+- 🔍 **Filters & Search** - Advanced transaction filtering
+- 📈 **Analytics** - Detailed reports and spending trends
+- 👤 **Profile Management** - Password change and profile picture settings
 
-**Status projektu:** 🚧 W trakcie rozwoju
+## 🛠 Tech Stack
 
-***
+This project was built using the following technologies:
 
-## ✨ Funkcjonalności
-
-- 🔐 **Autentykacja użytkownika** - Rejestracja, logowanie, zarządzanie sesją (JWT)
-- 💰 **Zarządzanie transakcjami** - Dodawanie, edycja, usuwanie przychodów i wydatków
-- 📊 **Dashboard z wykresami** - Wizualizacja danych za pomocą Recharts (pie charts, line charts, bar charts)
-- 💳 **Budżety miesięczne** - Tworzenie i monitorowanie budżetów z alertami
-- 🎯 **Cele oszczędnościowe** - Śledzenie postępów w osiąganiu celów finansowych
-- 📱 **Responsive design** - Pełne wsparcie dla urządzeń mobilnych i tabletów
-- 🌓 **Dark mode** - Przełącznik między jasnym a ciemnym motywem
-- 🔍 **Filtry i wyszukiwanie** - Zaawansowane filtrowanie transakcji
-- 📈 **Analityka** - Szczegółowe raporty i trendy wydatków
-
-***
-
-## 🛠 Technologie
-
-Projekt został zbudowany z wykorzystaniem następujących technologii:
-
-- **React.js** 18+ - Biblioteka UI
-- **Vite** - Build tool i dev server
+- **React.js** 18+ - UI Library
+- **TypeScript** 98.4% - Type-safe JavaScript
+- **Vite** - Build tool and dev server
 - **React Router** v6 - Routing
-- **Tailwind CSS** - Style i responsive design
-- **Recharts** - Wykresy i wizualizacje
-- **Axios** - HTTP client dla API calls
-- **React Context API** - State management (autentykacja, theme)
-- **Redux Toolkit** - State management (transakcje, budżety)
-- **React Hook Form** - Zarządzanie formularzami
-- **date-fns** - Manipulacja datami
-- **React Icons** - Ikony
+- **Tailwind CSS** - Styling and responsive design
+- **Recharts** - Charts and visualizations
+- **React Hook Form** - Form management
+- **date-fns** - Date manipulation
+- **React Icons** - Icon library
 
-***
+## 📦 Prerequisites
 
-## 📦 Wymagania
+Before you begin, ensure you have the following installed:
 
-Przed rozpoczęciem upewnij się, że masz zainstalowane:
-
-- **Node.js** (wersja 16.x lub wyższa)
-- **npm** (wersja 8.x lub wyższa) lub **yarn**
+- **Node.js** (version 16.x or higher)
+- **npm** (version 8.x or higher) or **yarn**
 - **Git**
 
-Opcjonalnie:
-- **VS Code** z rozszerzeniami: ESLint, Prettier, Tailwind CSS IntelliSense
+Optional:
 
-***
+- **VS Code** with extensions: ESLint, Prettier, Tailwind CSS IntelliSense
 
-## 🚀 Instalacja
+## 🚀 Installation
 
-### 1. Sklonuj repozytorium
+### 1. Clone the repository
 
-```bash
-git clone https://github.com/twoj-username/personal-finance-tracker-frontend.git
-cd personal-finance-tracker-frontend
+git clone https://github.com/Macijke/FINANCE-FLOW-FRONTEND.git
+cd FINANCE-FLOW-FRONTEND
+
+### 2. Install dependencies
+
+`npm install`
+
+or
+
+`yarn install`
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory and add the following variables:
+
 ```
-
-### 2. Zainstaluj zależności
-
-```bash
-npm install
-# lub
-yarn install
-```
-
-***
-
-## ⚙️ Konfiguracja
-
-### Zmienne środowiskowe
-
-Utwórz plik `.env` w głównym katalogu projektu i dodaj następujące zmienne:
-
-```env
-# API URL (backend)
+#API URL (backend)
 VITE_API_URL=http://localhost:8080/api/v1
 
-# Environment
+#Environment
 VITE_ENV=development
 
-# Optional: Analytics, etc.
-# VITE_ANALYTICS_ID=your-analytics-id
+#Optional: Analytics, etc.
+VITE_ANALYTICS_ID=your-analytics-id
 ```
+
+## 🏃 Running The Application
 
 ### Development mode
 
-```bash
-npm run dev
-# lub
-yarn dev
-```
+`npm run dev`
 
-Aplikacja będzie dostępna pod adresem: **http://localhost:5173**
+or
 
-### Build produkcyjny
+`yarn dev`
 
-```bash
-npm run build
-# lub
-yarn build
-```
+The application will be available at: [**http://localhost:5173**](http://localhost:5173)
 
-Zbudowane pliki znajdziesz w katalogu `dist/`.
+### Production build
 
-### Preview buildu
+`npm run build`
 
-```bash
-npm run preview
-# lub
-yarn preview
-```
+or
 
-***
+`yarn build`
 
-## 📁 Struktura Projektu
+Built files will be located in the `dist/` directory.
 
+### Preview build
+
+`npm run preview`
+
+or
+
+`yarn preview`
+
+## 📁 Project Structure
 ```
 frontend/
-├── public/                 # Pliki statyczne
-│   └── favicon.ico
+├── public/ # Static files
+│ └── favicon.ico
 ├── src/
-│   ├── assets/            # Obrazy, fonty, etc.
-│   ├── components/        # Komponenty React
-│   │   ├── common/        # Reużywalne komponenty (Button, Modal, Input)
-│   │   ├── layout/        # Layout komponenty (Header, Sidebar, Footer)
-│   │   ├── dashboard/     # Komponenty Dashboard
-│   │   ├── transactions/  # Komponenty Transakcji
-│   │   ├── budgets/       # Komponenty Budżetów
-│   │   └── analytics/     # Komponenty Analityki
-│   ├── pages/             # Strony aplikacji
-│   │   ├── Dashboard.jsx
-│   │   ├── Transactions.jsx
-│   │   ├── Budgets.jsx
-│   │   ├── Analytics.jsx
-│   │   ├── SavingsGoals.jsx
-│   │   ├── Settings.jsx
-│   │   └── Auth/
-│   │       ├── Login.jsx
-│   │       └── Register.jsx
-│   ├── hooks/             # Custom React hooks
-│   ├── context/           # Context API (AuthContext, ThemeContext)
-│   ├── store/             # Redux store i slices
-│   ├── services/          # API services (axios instances)
-│   ├── utils/             # Utility functions
-│   ├── styles/            # Global styles (Tailwind config)
-│   ├── App.jsx            # Główny komponent App
-│   ├── main.jsx           # Entry point
-│   └── routes.jsx         # Definicje routingu
-├── .env.example           # Przykładowa konfiguracja env
+│ ├── assets/ # Images, fonts, etc.
+│ ├── components/ # React components
+│ │ ├── common/ # Reusable components (Button, Modal, Input)
+│ │ ├── layout/ # Layout components (Header, Sidebar, Footer)
+│ │ ├── dashboard/ # Dashboard components
+│ │ ├── transactions/ # Transaction components
+│ │ ├── budgets/ # Budget components
+│ │ └── analytics/ # Analytics components
+│ ├── pages/ # Application pages
+│ │ ├── Dashboard.jsx
+│ │ ├── Transactions.jsx
+│ │ ├── Budgets.jsx
+│ │ ├── Analytics.jsx
+│ │ ├── SavingsGoals.jsx
+│ │ ├── Settings.jsx
+│ │ └── Auth/
+│ │ ├── Login.jsx
+│ │ └── Register.jsx
+│ ├── hooks/ # Custom React hooks
+│ ├── context/ # Context API (AuthContext, ThemeContext)
+│ ├── store/ # Redux store and slices
+│ ├── services/ # API services (axios instances)
+│ ├── utils/ # Utility functions
+│ ├── styles/ # Global styles (Tailwind config)
+│ ├── App.jsx # Main App component
+│ ├── main.jsx # Entry point
+│ └── routes.jsx # Route definitions
+├── .env.example # Example environment configuration
 ├── .gitignore
 ├── package.json
-├── tailwind.config.js     # Konfiguracja Tailwind CSS
-├── vite.config.js         # Konfiguracja Vite
+├── tailwind.config.js # Tailwind CSS configuration
+├── vite.config.js # Vite configuration
 └── README.md
 ```
 
-***
+## 📜 Available Scripts
 
-## 📜 Dostępne Skrypty
-
-| Komenda | Opis |
-|---------|------|
-| `npm run dev` | Uruchomienie dev servera |
-| `npm run build` | Build produkcyjny |
-| `npm run preview` | Preview buildu |
-| `npm run lint` | Uruchomienie ESLint |
-| `npm run format` | Formatowanie kodu (Prettier) |
-
-***
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Run development server |
+| `npm run build` | Production build |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
+| `npm run format` | Format code (Prettier) |
 
 ## 🔗 Backend API
 
-Ten frontend wymaga działającego backend API. Backend znajdziesz tutaj:
-- **Repository:** [personal-finance-tracker-backend](https://github.com/twoj-username/personal-finance-tracker-backend)
-- **Dokumentacja API:** [Swagger UI](http://localhost:8080/swagger-ui.html) (local)
+This frontend requires a running backend API. The backend can be found here:
 
-***
+- **Repository:** [FINANCE-FLOW-BACKEND](https://github.com/Macijke/FINANCE-FLOW-BACKEND)
+- **API Documentation:** Swagger UI (available locally)
 
+## 📝 Code Conventions
 
-## 📝 Konwencje Kodu
-
-- Używaj **ESLint** i **Prettier** do formatowania
-- Nazewnictwo komponentów: **PascalCase** (np. `TransactionList.jsx`)
-- Nazewnictwo plików utility: **camelCase** (np. `formatCurrency.js`)
+- Use **ESLint** and **Prettier** for formatting
+- Component naming: **PascalCase** (e.g., `TransactionList.jsx`)
+- Utility file naming: **camelCase** (e.g., `formatCurrency.js`)
 - CSS classes: **Tailwind utility classes**
-- Commits: używaj **Conventional Commits** (np. `feat:`, `fix:`, `docs:`)
+- Commits: use **Conventional Commits** (e.g., `feat:`, `fix:`, `docs:`)
 
+## 🚀 Deployment
 
-***
+The application is deployed on **Vercel** and is accessible at:
+[financeflowm.vercel.app](https://financeflowm.vercel.app)
 
-## 📄 Licencja
+## 📄 License
 
-Projekt jest dostępny na licencji **MIT**. Zobacz plik [LICENSE](LICENSE) dla szczegółów.
+This project is available under the **MIT License**. See the LICENSE file for details.
 
-***
-
-## 👨‍💻 Autor
+## 👨‍💻 Author
 
 **Macijke**
-- GitHub: [@Macijke](https://github.com/macijke)
+
+- GitHub: [@Macijke](https://github.com/Macijke)
 - Email: macijke@gmail.com
+
+## 🙏 Acknowledgments
+
+- React Icons
+- Recharts
+- Tailwind CSS
+- Vercel for free hosting
 
 ---
 
-## 🙏 Podziękowania
-
-- [React Icons](https://react-icons.github.io/react-icons/)
-- [Recharts](https://recharts.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Vercel](https://vercel.com/) za darmowy hosting
+⭐ If you find this project useful, please consider giving it a star!
