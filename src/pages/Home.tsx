@@ -38,11 +38,6 @@ export default function Home() {
                             Zacznij za darmo
                         </Button>
                     </Link>
-                    <Link to="/dashboard">
-                        <Button size="lg" variant="outline" className="text-lg px-8">
-                            Zobacz demo
-                        </Button>
-                    </Link>
                 </div>
             </section>
 
@@ -126,7 +121,7 @@ export default function Home() {
                         Gotowy na lepszą kontrolę finansów?
                     </h2>
                     <p className="text-lg mb-8 text-primary-foreground/80">
-                        Dołącz do tysięcy użytkowników, którzy już zarządzają swoimi finansami mądrzej.
+                        Dołącz do użytkowników, którzy już zarządzają swoimi finansami mądrzej.
                     </p>
                     <Link to="/auth">
                         <Button size="lg" variant="secondary" className="text-lg px-8">
@@ -138,7 +133,7 @@ export default function Home() {
 
             <footer className="border-t border-border py-8">
                 <div className="container mx-auto px-4 text-center text-muted-foreground">
-                    <p>&copy; 2024 Finance Flow. Wszystkie prawa zastrzeżone.</p>
+                    <p>&copy; 2025 Finance Flow. Wszystkie prawa zastrzeżone.</p>
                 </div>
             </footer>
         </div>

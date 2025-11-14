@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {ArrowDownRight, ArrowUpRight, Plus, Search, X} from "lucide-react";
+import {ArrowDownRight, ArrowUpRight, ChevronLeft, ChevronRight, Plus, Search, X} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Card} from "@/components/ui/card";
@@ -11,19 +11,29 @@ import {getApiUrl} from "@/config/api.ts";
 export default function Transactions() {
     const [cookies] = useCookies(['user']);
     const [transactions, setTransactions] = useState([]);
-    const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const [pageSize, setPageSize] = useState(10);
 
     const [searchQuery, setSearchQuery] = useState("");
     const [filterType, setFilterType] = useState("ALL");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
 
-    const handleTransactions = async () => {
+    const handleTransactions = async (page = 0, size = pageSize) => {
         try {
             setLoading(true);
-            const response = await fetch(getApiUrl(`/transactions`), {
+
+            const params = new URLSearchParams({
+                page: page.toString(),
+                size: size.toString(),
+            });
+
+            const response = await fetch(getApiUrl(`/transactions?${params}`), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${cookies.user}`,
@@ -31,9 +41,12 @@ export default function Transactions() {
             });
 
             const data = await response.json();
-            const trans = data.data.content || [];
-            setTransactions(trans);
-            setFilteredTransactions(trans);
+            const pageData = data.data;
+
+            setTransactions(pageData.content || []);
+            setCurrentPage(pageData.number || 0);
+            setTotalPages(pageData.totalPages || 0);
+            setTotalElements(pageData.totalElements || 0);
 
             return data;
         } catch (err) {
@@ -45,45 +58,41 @@ export default function Transactions() {
     };
 
     useEffect(() => {
-        handleTransactions();
-    }, [cookies.user]);
+        if (cookies.user) {
+            handleTransactions(0, pageSize);
+        }
+    }, [cookies.user, pageSize]);
 
-
-    useEffect(() => {
-        let filtered = transactions;
-
-        if (filterType !== "ALL") {
-            filtered = filtered.filter(t => t.type === filterType);
+    const filteredTransactions = transactions.filter(transaction => {
+        if (filterType !== "ALL" && transaction.type !== filterType) {
+            return false;
         }
 
-        if (startDate) {
-            filtered = filtered.filter(t => new Date(t.transactionDate) >= new Date(startDate));
+        if (startDate && new Date(transaction.transactionDate) < new Date(startDate)) {
+            return false;
         }
-
-        if (endDate) {
-            filtered = filtered.filter(t => new Date(t.transactionDate) <= new Date(endDate));
+        if (endDate && new Date(transaction.transactionDate) > new Date(endDate)) {
+            return false;
         }
 
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(t => {
-                const description = t.description?.toLowerCase() || "";
-                const categoryName = t.categoryName?.toLowerCase() || "";
-                const amount = t.amount?.toString() || "";
+            const description = transaction.description?.toLowerCase() || "";
+            const categoryName = transaction.categoryName?.toLowerCase() || "";
+            const amount = transaction.amount?.toString() || "";
 
-                return (
-                    description.includes(query) ||
-                    categoryName.includes(query) ||
-                    amount.includes(query)
-                );
-            });
+            return (
+                description.includes(query) ||
+                categoryName.includes(query) ||
+                amount.includes(query)
+            );
         }
 
-        setFilteredTransactions(filtered);
-    }, [searchQuery, filterType, startDate, endDate, transactions]);
+        return true;
+    });
 
     const onTransactionAdded = () => {
-        handleTransactions();
+        handleTransactions(currentPage, pageSize);
     };
 
     const resetFilters = () => {
@@ -93,14 +102,29 @@ export default function Transactions() {
         setEndDate("");
     };
 
+    const handlePageChange = (newPage) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            setCurrentPage(newPage);
+            handleTransactions(newPage, pageSize);
+        }
+    };
+
+    const handlePageSizeChange = (newSize) => {
+        setPageSize(newSize);
+        setCurrentPage(0);
+        handleTransactions(0, newSize);
+    };
+
     const hasActiveFilters = searchQuery || filterType !== "ALL" || startDate || endDate;
 
-    if (loading) {
+    if (loading && transactions.length === 0) {
         return (
-            <div className="space-y-6 animate-fade-in">
-                <h1 className="text-3xl font-bold">Transactions</h1>
+            <div className="space-y-6 animate-fade-in px-4 sm:px-0">
+                <h1 className="text-2xl sm:text-3xl font-bold">Transactions</h1>
                 <Card className="p-6 text-center">
-                    <p>Loading transactions...</p>
+                    <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                    </div>
                 </Card>
             </div>
         );
@@ -108,8 +132,8 @@ export default function Transactions() {
 
     if (error) {
         return (
-            <div className="space-y-6 animate-fade-in">
-                <h1 className="text-3xl font-bold">Transactions</h1>
+            <div className="space-y-6 animate-fade-in px-4 sm:px-0">
+                <h1 className="text-2xl sm:text-3xl font-bold">Transactions</h1>
                 <Card className="p-6 text-center text-destructive">
                     <p>Error: {error}</p>
                 </Card>
@@ -118,11 +142,11 @@ export default function Transactions() {
     }
 
     return (
-        <div className="space-y-6 animate-fade-in">
-            <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold">Transactions</h1>
+        <div className="space-y-6 animate-fade-in px-4 sm:px-0">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <h1 className="text-2xl sm:text-3xl font-bold">Transactions</h1>
                 <TransactionDialog onTransactionAdded={onTransactionAdded}>
-                    <Button className="gap-2">
+                    <Button className="gap-2 w-full sm:w-auto">
                         <Plus className="h-4 w-4"/>
                         Add Transaction
                     </Button>
@@ -154,7 +178,7 @@ export default function Transactions() {
                     )}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
+                <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
                     <div className="flex gap-2 flex-wrap items-center">
                         <select
                             value={filterType}
@@ -187,18 +211,40 @@ export default function Transactions() {
                         </div>
                     </div>
 
-                    <div className="text-xs text-muted-foreground">
-                        <span
-                            className="font-semibold text-foreground">{filteredTransactions.length}</span>/{transactions.length}
+                    <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground">Show:</span>
+                        <select
+                            value={pageSize}
+                            onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+                            className="px-2 py-1 text-xs border border-border rounded-md bg-background text-foreground hover:bg-muted transition-colors h-8"
+                        >
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={20}>20</option>
+                            <option value={50}>50</option>
+                        </select>
                     </div>
                 </div>
             </Card>
 
             <Card className="p-4">
-                <h2 className="text-lg font-semibold mb-3">Recent Transactions</h2>
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-lg font-semibold">Transactions</h2>
+                    <div className="text-xs text-muted-foreground">
+                        {hasActiveFilters && (
+                            <span
+                                className="font-semibold text-foreground">{filteredTransactions.length} filtered / </span>
+                        )}
+                        <span className="font-semibold text-foreground">{totalElements}</span> total
+                    </div>
+                </div>
 
-                {filteredTransactions.length === 0 ? (
-                    <div className="text-center py-6 text-muted-foreground text-sm">
+                {loading ? (
+                    <div className="flex items-center justify-center py-12">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                    </div>
+                ) : filteredTransactions.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground text-sm">
                         {transactions.length === 0 ? (
                             <p>No transactions yet. Create one to get started!</p>
                         ) : (
@@ -214,13 +260,13 @@ export default function Transactions() {
                             return (
                                 <div
                                     key={transaction.id}
-                                    className={cn("flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-smooth cursor-pointer border border-border/50")}
+                                    className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer border border-border/50"
                                 >
-
                                     <div className="flex items-center gap-3 flex-1 min-w-0">
                                         <div
-                                            className={cn("p-2 rounded-lg text-2xl flex-shrink-0")}
-                                            style={{backgroundColor: transaction.categoryColor}}>
+                                            className="p-2 rounded-lg text-xl sm:text-2xl flex-shrink-0"
+                                            style={{backgroundColor: transaction.categoryColor}}
+                                        >
                                             {iconEmoji}
                                         </div>
                                         <div className="min-w-0 flex-1">
@@ -243,7 +289,7 @@ export default function Transactions() {
                                             )}
                                         </div>
                                         <p className={cn(
-                                            "font-bold text-lg text-right min-w-fit",
+                                            "font-bold text-base sm:text-lg text-right min-w-fit",
                                             isIncome ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
                                         )}>
                                             {isIncome ? "+" : "-"}${Math.abs(transaction.amount).toFixed(2)}
@@ -252,6 +298,82 @@ export default function Transactions() {
                                 </div>
                             );
                         })}
+                    </div>
+                )}
+
+                {!hasActiveFilters && totalPages > 1 && (
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t">
+                        <div className="text-xs text-muted-foreground">
+                            Page <span className="font-semibold text-foreground">{currentPage + 1}</span> of{' '}
+                            <span className="font-semibold text-foreground">{totalPages}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handlePageChange(0)}
+                                disabled={currentPage === 0}
+                                className="h-8"
+                            >
+                                First
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 0}
+                                className="h-8 w-8 p-0"
+                            >
+                                <ChevronLeft className="h-4 w-4"/>
+                            </Button>
+
+                            <div className="hidden sm:flex items-center gap-1">
+                                {Array.from({length: Math.min(5, totalPages)}, (_, i) => {
+                                    let pageNum;
+                                    if (totalPages <= 5) {
+                                        pageNum = i;
+                                    } else if (currentPage < 3) {
+                                        pageNum = i;
+                                    } else if (currentPage > totalPages - 3) {
+                                        pageNum = totalPages - 5 + i;
+                                    } else {
+                                        pageNum = currentPage - 2 + i;
+                                    }
+
+                                    return (
+                                        <Button
+                                            key={pageNum}
+                                            variant={currentPage === pageNum ? "default" : "outline"}
+                                            size="sm"
+                                            onClick={() => handlePageChange(pageNum)}
+                                            className="h-8 w-8 p-0"
+                                        >
+                                            {pageNum + 1}
+                                        </Button>
+                                    );
+                                })}
+                            </div>
+
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage >= totalPages - 1}
+                                className="h-8 w-8 p-0"
+                            >
+                                <ChevronRight className="h-4 w-4"/>
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handlePageChange(totalPages - 1)}
+                                disabled={currentPage >= totalPages - 1}
+                                className="h-8"
+                            >
+                                Last
+                            </Button>
+                        </div>
                     </div>
                 )}
             </Card>
