@@ -63,8 +63,24 @@ export default function Analytics() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+            <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+                <div className="relative">
+                    <Wallet className="h-20 w-20 text-blue-600 animate-pulse" />
+                    <div className="absolute inset-0 rounded-full bg-blue-600/20 animate-ping"></div>
+                </div>
+
+                <div className="text-center space-y-2">
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                        Finance Flow
+                    </h2>
+                    <p className="text-sm text-muted-foreground animate-pulse">
+                        Drawing graphs...
+                    </p>
+                </div>
+
+                <div className="w-64 h-1 bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 animate-loading-bar"></div>
+                </div>
             </div>
         );
     }

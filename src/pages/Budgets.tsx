@@ -1,4 +1,4 @@
-import {Edit, Plus, Trash2} from "lucide-react";
+import {Edit, Plus, Trash2, Wallet} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import {useEffect, useState} from "react";
@@ -83,11 +83,24 @@ export default function Budgets() {
 
     if (loading) {
         return (
-            <div className="space-y-6 animate-fade-in">
-                <h1 className="text-3xl font-bold">Budgets</h1>
-                <Card className="p-6 text-center">
-                    <p>Loading budgets...</p>
-                </Card>
+            <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+                <div className="relative">
+                    <Wallet className="h-20 w-20 text-blue-600 animate-pulse" />
+                    <div className="absolute inset-0 rounded-full bg-blue-600/20 animate-ping"></div>
+                </div>
+
+                <div className="text-center space-y-2">
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                        Finance Flow
+                    </h2>
+                    <p className="text-sm text-muted-foreground animate-pulse">
+                        Loading budgets...
+                    </p>
+                </div>
+
+                <div className="w-64 h-1 bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 animate-loading-bar"></div>
+                </div>
             </div>
         );
     }
